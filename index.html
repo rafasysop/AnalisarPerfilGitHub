@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Analisador Perfil Github</title>
+    </head>
+    <style type="text/css">
+            #nomeGit {
+                 width:260px
+            }
+    </style>
+        <body>
+            
+                <h1>Analisador Perfil Github</h1>
+
+                <input type="text" id="nomeGit"  width="450" placeholder="Digite o usuario GitHub que deseja Analisar" />
+                <button onclick="recuperarDadosGit()" id="buscarGit">Buscar</button><br/><br/>
+            <div id="app"></div>
+            <script type="text/javascript">
+                var elApp = document.getElementById("app");
+                var nomeGitU = document.getElementById("nomeGit");
+                
+                function recuperarDadosGit(){
+                    elApp.innerHTML = ''; // apaga o conteúdo da div#app
+                   var xhr = new XMLHttpRequest();
+                   var nomeGitUrl = nomeGitU.value;
+                   
+                    // se campo nomeGit estiver vazio atribui usuario do Rafael
+                    if (nomeGitUrl == null || nomeGitUrl == ""){
+                        nomeGitUrl = "rafasysop";
+                    }
+                
+                    
+                    //busca dados no github
+                    xhr.open("GET", 'https://api.github.com/users/'+ nomeGitUrl);
+                    xhr.send(null);
+                    xhr.onreadystatechange = function(){
+                        if(xhr.readyState === 4){
+                            console.log();
+                            var res = JSON.parse(xhr.responseText);
+                            // variaveis que busca os dados
+                            var nome = res.name;
+                            var avatar = res.avatar_url;
+                            var bio = res.bio;
+                            var followers = res.followers;
+                            var following = res.following;
+                            var created = res.created_at;
+                            var update = res.updated_at;
+
+                            var elAvatar = document.createElement("img");
+                            elAvatar.setAttribute("width", "190");
+                            elAvatar.setAttribute("src", avatar);
+
+                            var elNome = document.createElement("p");
+                            elNome.innerText = "Nome do Usuario: "+ nome;
+
+                            var elFollowers = document.createElement("p");
+                            elFollowers.innerText = "Tem: "+ followers +" seguidores.";
+
+                            var elFollowing = document.createElement("p");
+                            elFollowing.innerText = "Segue: "+ following +" usuários.";
+
+                            var elBio = document.createElement("p");
+                            elBio.innerText = "Biografia: "+ bio;
+
+                            var elCreated = document.createElement("p");
+                            elCreated.innerText = "Criado em: "+ created;
+
+                            var elUpdate = document.createElement("p");
+                            elUpdate.innerText = "Atualizado em: "+ update;
+
+
+                            elApp.appendChild(elAvatar);
+                            elApp.appendChild(elNome);
+                            elApp.appendChild(elBio);
+                            elApp.appendChild(elFollowers);
+                            elApp.appendChild(elFollowing);
+                            elApp.appendChild(elCreated);
+                            elApp.appendChild(elUpdate);
+                            
+
+                        }
+                    }
+                }
+            </script>
+        </body>
+</html>
